@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03C63CF61E68F428005E5527 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C63CF51E68F428005E5527 /* CoreBluetooth.framework */; };
+		03E8C7021E6910C700A2A112 /* DAIPhoneGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E8C7011E6910C700A2A112 /* DAIPhoneGPS.m */; };
+		03E8C7041E69112300A2A112 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8C7031E69112300A2A112 /* CoreLocation.framework */; };
+		03E8C7071E69659A00A2A112 /* lla_ecef.c in Sources */ = {isa = PBXBuildFile; fileRef = 03E8C7051E69659A00A2A112 /* lla_ecef.c */; };
 		3B16A8EC19D12167008C1818 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B16A8EB19D12167008C1818 /* Foundation.framework */; };
 		3B16A8EE19D12167008C1818 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B16A8ED19D12167008C1818 /* CoreGraphics.framework */; };
 		3B16A8F019D12167008C1818 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B16A8EF19D12167008C1818 /* UIKit.framework */; };
@@ -147,6 +151,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03C63CF51E68F428005E5527 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		03E8C7001E6910C700A2A112 /* DAIPhoneGPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAIPhoneGPS.h; sourceTree = "<group>"; };
+		03E8C7011E6910C700A2A112 /* DAIPhoneGPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAIPhoneGPS.m; sourceTree = "<group>"; };
+		03E8C7031E69112300A2A112 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		03E8C7051E69659A00A2A112 /* lla_ecef.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lla_ecef.c; sourceTree = "<group>"; };
+		03E8C7061E69659A00A2A112 /* lla_ecef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lla_ecef.h; sourceTree = "<group>"; };
 		3B16A8E819D12167008C1818 /* DJISdkDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DJISdkDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B16A8EB19D12167008C1818 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3B16A8ED19D12167008C1818 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -326,6 +336,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03E8C7041E69112300A2A112 /* CoreLocation.framework in Frameworks */,
+				03C63CF61E68F428005E5527 /* CoreBluetooth.framework in Frameworks */,
 				F46E0D4F1BD87C1600627E7D /* CoreMedia.framework in Frameworks */,
 				DEE81F611B9E7EAB006B8ED1 /* VideoToolbox.framework in Frameworks */,
 				3B628ABE1AEE0BC60079AF13 /* MapKit.framework in Frameworks */,
@@ -373,6 +385,8 @@
 		3B16A8EA19D12167008C1818 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03E8C7031E69112300A2A112 /* CoreLocation.framework */,
+				03C63CF51E68F428005E5527 /* CoreBluetooth.framework */,
 				B82541FA1C98E8500021CDDF /* VideoPreviewer.xcodeproj */,
 				B82541F81C98E8450021CDDF /* DJISDK.framework */,
 				F46E0D4E1BD87C1600627E7D /* CoreMedia.framework */,
@@ -400,6 +414,10 @@
 				3B16A8FD19D12167008C1818 /* Images.xcassets */,
 				3B16A94519D1219B008C1818 /* Resource */,
 				3B16A8F219D12167008C1818 /* Supporting Files */,
+				03E8C7001E6910C700A2A112 /* DAIPhoneGPS.h */,
+				03E8C7011E6910C700A2A112 /* DAIPhoneGPS.m */,
+				03E8C7051E69659A00A2A112 /* lla_ecef.c */,
+				03E8C7061E69659A00A2A112 /* lla_ecef.h */,
 			);
 			path = DJISdkDemo;
 			sourceTree = "<group>";
@@ -958,6 +976,7 @@
 				ORGANIZATIONNAME = DJI;
 				TargetAttributes = {
 					3B16A8E719D12167008C1818 = {
+						DevelopmentTeam = SURV7Y8696;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
@@ -1123,6 +1142,7 @@
 				B8450C7D1C37ED6200921E19 /* WaypointMissionViewController.m in Sources */,
 				B81A90741DBE000E0052A483 /* VideoPreviewerSDKAdapter.m in Sources */,
 				B821D4111C316A000014ADBD /* GimbalRotationInSpeedViewController.m in Sources */,
+				03E8C7021E6910C700A2A112 /* DAIPhoneGPS.m in Sources */,
 				B821D3F91C31643D0014ADBD /* DemoTableViewController.m in Sources */,
 				3B2CDDA91C3DA9F700DB096B /* RCHardwareStateViewController.m in Sources */,
 				3B2CDD881C3CC21D00DB096B /* FCFlightLimitationViewController.m in Sources */,
@@ -1155,6 +1175,7 @@
 				B8450C6F1C3798AF00921E19 /* MissionBaseViewController.m in Sources */,
 				B8C6CA651C3F95B900CAC10B /* HandheldControllerActionsTableViewController.m in Sources */,
 				B821D3FD1C3166810014ADBD /* DemoUtilityMethod.m in Sources */,
+				03E8C7071E69659A00A2A112 /* lla_ecef.c in Sources */,
 				B80CF5821CC5E71E004358FC /* DJIGimbal+CapabilityCheck.m in Sources */,
 				B821D40B1C3169920014ADBD /* GimbalPushInfoViewController.m in Sources */,
 				B821D3FA1C31643D0014ADBD /* MBProgressHUD.m in Sources */,
@@ -1287,7 +1308,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = SURV7Y8696;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1304,7 +1325,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dji.sdksamplecode;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.drive.DroneAutopilot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1323,7 +1344,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = SURV7Y8696;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1340,7 +1361,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.dji.sdksamplecode;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.drive.DroneAutopilot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

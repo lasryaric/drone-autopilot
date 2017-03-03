@@ -18,18 +18,31 @@
  */
 #import <DJISDK/DJISDK.h>
 #import "FollowMeMissionViewController.h"
+#import "DAIPhoneGPS.h"
+#import "DemoComponentHelper.h"
+#import "DemoAlertView.h"
+
+
 
 #define RUNNING_DISTANCE_IN_METER   (10)
 #define ONE_METER_OFFSET            (0.00000901315)
+int phoneLocationUpdated = 0;
+int aircraftLocationUpdated = 0;
 
 @interface FollowMeMissionViewController ()
 
 @property (nonatomic, strong) NSTimer* updateTimer;
+@property (nonatomic, strong) NSTimer* yawTimer;
 @property (nonatomic) CLLocationCoordinate2D currentTarget;
 @property (nonatomic) CLLocationCoordinate2D target1;
 @property (nonatomic) CLLocationCoordinate2D target2;
 @property (nonatomic) CLLocationCoordinate2D prevTarget;
+@property (nonatomic, strong) DAIPhoneGPS *daiPhoneGPS;
 @property (nonatomic) BOOL isGoingToNorth;
+@property (nonatomic, strong) UILabel *status;
+@property (nonatomic, strong) UIButton *yawButton;
+@property(nonatomic, strong) CLLocation* DAIcurrentLocation;
+
 
 @end
 
@@ -43,9 +56,106 @@
     // Follow-me mission required the aircraft location before initializing the mission
     // Therefore, we disable the prepare button until the aircraft location is valid
     [self.prepareButton setEnabled:CLLocationCoordinate2DIsValid(self.aircraftLocation)];
+    self.status = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 500, 200)];
+    self.status.lineBreakMode = NSLineBreakByWordWrapping;
+    self.status.numberOfLines = 0;
+    [self.view addSubview:self.status];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self
+               action:@selector(yawOnce:)
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:@"Yaw once!" forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 210.0, 160.0, 40.0);
+    self.yawButton = button;
+    self.yawButton.backgroundColor = [UIColor blueColor];
+    [self.view addSubview:button];
+    
+    
+    self.daiPhoneGPS = [[DAIPhoneGPS alloc] init];
+    [self.daiPhoneGPS startMonitoring:^(CLLocation *location, NSError *error) {
+        self.DAIcurrentLocation = location;
+        
+    }];
+}
+
+-(void)yawOnce:(id)sender {
+    DJIFlightController* fc = [DemoComponentHelper fetchFlightController];
+    
+    if (self.yawTimer.isValid) {
+        [self.yawTimer invalidate];
+        self.yawTimer = nil;
+        if (fc) {
+            [fc disableVirtualStickControlModeWithCompletion:^(NSError * _Nullable error) {
+                ShowResult(@"Disabled virtual stick:%@", error.description);
+            }];
+        }
+        
+    } else {
+        
+        
+        
+        
+        if (fc) {
+            fc.yawControlMode = DJIVirtualStickYawControlModeAngle;
+            fc.rollPitchControlMode = DJIVirtualStickRollPitchControlModeAngle;
+            
+            [fc enableVirtualStickControlModeWithCompletion:^(NSError *error) {
+                if (error) {
+                    ShowResult(@"Enter Virtual Stick Mode:%@", error.description);
+                }
+                else
+                {
+                    ShowResult(@"Enter Virtual Stick Mode:Succeeded");
+                    if (self.yawTimer == nil) {
+                        self.yawTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(sendLittleYaw:) userInfo:nil repeats:YES];
+                    }
+                    [self.yawTimer fire];
+                    
+                }
+            }];
+        }
+    }
+    
+    
+}
+int yawCount = 0;
+
+
+-(void)sendLittleYaw:(id)sender {
+    DJIVirtualStickFlightControlData ctrlData = {0};
+    //                ctrlData.pitch = mYVelocity;
+    //                ctrlData.roll = mXVelocity;
+    float myYaw = self.DAIcurrentLocation.course;
+    if (myYaw > 180.0) {
+        myYaw = -360.0 + myYaw;
+    }
+//    ctrlData.yaw = myYaw;
+    ctrlData.roll = 1.0;
+    
+//    CLLocationDistance distance = [FollowMeMissionViewController calculateDistanceBetweenPoint:self.aircraftLocation andPoint:self.DAIcurrentLocation.coordinate];
+//    if (distance > 0.2) {
+//        ctrlData.roll = 3.0;
+//    } else {
+//        ctrlData.roll = 0;
+//    }
+//    if (self.DAIcurrentLocation.course < 0.0) {
+//        ctrlData.roll = 0.0;
+//    }
+    
+    //                ctrlData.verticalThrottle = mThrottle;
+    DJIFlightController* fc = [DemoComponentHelper fetchFlightController];
+    if (fc && fc.isVirtualStickControlModeAvailable) {
+        [fc sendVirtualStickFlightControlData:ctrlData withCompletion:^(NSError * _Nullable error) {
+            [self.status setText:[NSString stringWithFormat:@"yaw: %f\n long:%f, lat:%f", myYaw, self.DAIcurrentLocation.coordinate.longitude, _DAIcurrentLocation.coordinate.latitude]];
+        }];
+    }
+
+    
 }
 
 -(void)setAircraftLocation:(CLLocationCoordinate2D)aircraftLocation {
+    aircraftLocationUpdated++;
     _aircraftLocation = aircraftLocation;
     [self.prepareButton setEnabled:CLLocationCoordinate2DIsValid(self.aircraftLocation)];
 }
@@ -54,6 +164,9 @@
     DJIFollowMeMission* mission = [[DJIFollowMeMission alloc] init];
     mission.followMeCoordinate = self.aircraftLocation;
     mission.heading = DJIFollowMeHeadingTowardFollowPosition;
+
+
+    
     
     return mission;
 }
@@ -66,10 +179,13 @@
  */
 -(void) startUpdateTimer {
     if (self.updateTimer == nil) {
-        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(onUpdateTimerTicked:) userInfo:nil repeats:YES];
+                self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(onUpdateTimerTicked:) userInfo:nil repeats:YES];
     }
+//    [self.updateTimer fire];
     
-    [self.updateTimer fire];
+    if (self.daiPhoneGPS == Nil) {
+        self.daiPhoneGPS = [[DAIPhoneGPS alloc] init];
+    }
 }
 
 -(void) pauseUpdateTimer {
@@ -89,24 +205,19 @@
         [self.updateTimer invalidate];
         self.updateTimer = nil;
     }
+    [self.daiPhoneGPS stop];
+    self.daiPhoneGPS = Nil;
 }
 
 -(void) onUpdateTimerTicked:(id)sender
 {
-    float offset = 0.0;
-    if (self.currentTarget.latitude == self.target1.latitude) {
-        offset = -0.1 * ONE_METER_OFFSET;
-    }
-    else {
-        offset = 0.1 * ONE_METER_OFFSET;
-    }
+
     
-    CLLocationCoordinate2D target = CLLocationCoordinate2DMake(self.prevTarget.latitude + offset, self.prevTarget.longitude);
-    [DJIFollowMeMission updateFollowMeCoordinate:target withCompletion:nil];
+    [DJIFollowMeMission updateFollowMeCoordinate:self.DAIcurrentLocation.coordinate withCompletion:nil];
     
-    self.prevTarget = target;
+//    self.prevTarget = target;
     
-    [self changeDirectionIfFarEnough];
+//    [self changeDirectionIfFarEnough];
 }
 
 -(void) changeDirectionIfFarEnough {
@@ -186,6 +297,7 @@
     if (error) return;
     
     [self resumeUpdateTimer];
+    
 }
 
 -(void)missionDidStop:(NSError *)error {

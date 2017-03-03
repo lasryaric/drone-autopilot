@@ -32,9 +32,9 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string>The drone needs to follow you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>The drone needs to follow you</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

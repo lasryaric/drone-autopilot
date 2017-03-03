@@ -6,7 +6,7 @@
 //
 
 #import "BluetoothConnectorViewController.h"
-#import <Corebluetooth/CoreBluetooth.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 #import "DemoUtility.h"
 #import <DJISDK/DJISDK.h>
 
