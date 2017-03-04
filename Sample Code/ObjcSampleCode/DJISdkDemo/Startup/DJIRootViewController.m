@@ -54,6 +54,9 @@ int iterations = 0;
     {
         [DJISDKManager registerApp:appKey withDelegate:self];
     }
+//    [DJISDKManager enterDebugModeWithDebugId:@"192.168.1.155"];
+
+    
     self.status = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 500, 200)];
     [self.view addSubview:self.status];
     self.status.lineBreakMode = NSLineBreakByWordWrapping;
@@ -115,7 +118,7 @@ int iterations = 0;
     else {
         
 #if ENTER_DEBUG_MODE
-        [DJISDKManager enterDebugModeWithDebugId:@"10.128.129.78"];
+        [DJISDKManager enterDebugModeWithDebugId:@"192.168.1.155"];
 #else
         [DJISDKManager startConnectionToProduct];
 #endif

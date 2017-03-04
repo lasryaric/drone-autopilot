@@ -99,6 +99,7 @@ int aircraftLocationUpdated = 0;
         if (fc) {
             fc.yawControlMode = DJIVirtualStickYawControlModeAngle;
             fc.rollPitchControlMode = DJIVirtualStickRollPitchControlModeAngle;
+            fc.rollPitchCoordinateSystem = DJIVirtualStickFlightCoordinateSystemBody;
             
             [fc enableVirtualStickControlModeWithCompletion:^(NSError *error) {
                 if (error) {
@@ -122,26 +123,34 @@ int aircraftLocationUpdated = 0;
 int yawCount = 0;
 
 
+int currentHeading = 0;
+int headingCounter = 0;
+
 -(void)sendLittleYaw:(id)sender {
     DJIVirtualStickFlightControlData ctrlData = {0};
     //                ctrlData.pitch = mYVelocity;
     //                ctrlData.roll = mXVelocity;
+//    headingCounter++;
+//    if (headingCounter % 10 == 0) {
+//        currentHeading += 1 % 360;
+//    }
     float myYaw = self.DAIcurrentLocation.course;
+//    float myYaw = currentHeading * 1.0;
+    NSLog(@"Current heading: %f", myYaw);
+    
     if (myYaw > 180.0) {
         myYaw = -360.0 + myYaw;
     }
-//    ctrlData.yaw = myYaw;
-    ctrlData.roll = 1.0;
+    ctrlData.yaw = myYaw;
     
-//    CLLocationDistance distance = [FollowMeMissionViewController calculateDistanceBetweenPoint:self.aircraftLocation andPoint:self.DAIcurrentLocation.coordinate];
+    CLLocationDistance distance = [FollowMeMissionViewController calculateDistanceBetweenPoint:self.aircraftLocation andPoint:self.DAIcurrentLocation.coordinate];
+    float pitch = distance * DJIVirtualStickRollPitchControlMaxAngle;
+    if (pitch > DJIVirtualStickRollPitchControlMaxAngle) {
+        pitch = DJIVirtualStickRollPitchControlMaxAngle;
+    }
+    ctrlData.pitch = pitch;
 //    if (distance > 0.2) {
-//        ctrlData.roll = 3.0;
-//    } else {
-//        ctrlData.roll = 0;
-//    }
-//    if (self.DAIcurrentLocation.course < 0.0) {
-//        ctrlData.roll = 0.0;
-//    }
+
     
     //                ctrlData.verticalThrottle = mThrottle;
     DJIFlightController* fc = [DemoComponentHelper fetchFlightController];
